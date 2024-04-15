@@ -1,0 +1,21 @@
+{
+  "name": "ya6-async-race",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install:mono": "npm install",
+    "install:server": "npm install --prefix async-race-api",
+    "install:client": "npm install --prefix async-race-client",
+    "install:all": "npm install & npm install --prefix async-race-api & npm install --prefix async-race-client",
+    "serve:server": "npm run --prefix async-race-api start",
+    "serve:client": "cd async-race-client && ng serve ",
+    "serve:all": "concurrently \"npm run serve:server\" \"npm run serve:client\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
