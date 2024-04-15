@@ -1,1 +1,219 @@
-/* You can add global styles to this file, and also import other style files */
+@charset "utf-8";
+
+:root {
+  --white: #fff;
+  --gray: gray;
+  --l-gray: #f5f5f5;
+  --tiffany: #1abc9c;
+  --dark: #080707;
+  --dark2: hsl(323 21% 16%);
+  --darkblue: darkblue;
+  /* --clr-neon: hsl(317 100% 54%); */
+  /* --clr-neon: rgb(65, 134, 236); */
+  --clr-neon: rgb(10, 255, 23);
+  --gray2: #9091a3;
+  --darkOpacity: rgba(0, 0, 0, 0.6);
+  --lightOpacity: rgba(10, 255, 23, 0.7);
+  --remote: 100px;
+  --remote-name: 105px;
+}
+
+.brd {
+  border: 2px solid red;
+}
+
+html,
+body {
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+  background-image: url("./assets/img/back-2.jpg");
+  /* background: var(--dark2); */
+  /* background: var(--gray2); */
+  color: var(--white);
+  margin: 0rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 0;
+}
+
+
+/* buttons */
+
+.neon-button-container {
+  height: 70px;
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem;
+  background: var(--darkOpacity);
+  align-items: center;
+}
+.container {
+  padding: 1rem;
+}
+
+.neon-button {
+  font-size: 1.25rem;
+  display: inline-block;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--clr-neon);
+  border: var(--clr-neon) 0.125em solid;
+  padding: 0.25em 1em;
+  border-radius: 0.25em;
+  background: transparent;
+  text-shadow: 0 0 0.125em hsl(0 0% 100% / 0.3), 0 0 0.45em currentColor;
+  box-shadow: inset 0 0 0.5em 0 var(--clr-neon), 0 0 0.5em 0 var(--clr-neon);
+  position: relative;
+  margin-right: 2rem;
+}
+
+.neon-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0 0 2em 0.5em var(--clr-neon);
+  opacity: 0;
+  transition: opacity 100ms linear;
+}
+
+.neon-button:focus {
+  text-shadow: none;
+}
+
+.neon-button:hover::after {
+  opacity: 1;
+}
+
+.neon-button:focus::after {
+  opacity: 1;
+}
+
+.fill-button {
+  background: none;
+  border: 2px solid;
+  border-radius: 0.25em;
+  margin: 0.5em;
+  padding: 0.5em 1em;
+  color: var(--fill);
+  transition: 0.25s;
+}
+
+.fill-button:hover {
+  color: var(--clr-neon);
+}
+
+.pick-color {
+  vertical-align: middle;
+  border: none;
+  background: none;
+  width: 50px;
+  height: 30px;
+  padding: 0;
+  margin: 0;
+  padding-bottom: 3px;
+}
+
+.car-track {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  width: 100%;
+  border: 1px solid black;
+}
+.control-remote {
+  width: var(--remote);
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  background: var(--dark);
+  height: 70%;
+  z-index: 100;
+}
+.track-button {
+  margin-top: 0.1rem;
+  margin-left: 0.1rem;
+}
+.car {
+  position: absolute;
+  left: var(--remote);
+  bottom: 10px;
+}
+.car-name {
+  position: absolute;
+  left: var(--remote-name);
+  top: 0px;
+}
+.cars-count {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--clr-neon);
+  text-shadow: 2px 2px var(--dark);
+}
+
+.controls-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.table-head {
+  margin: 1rem auto 0;
+  width: 62vw;
+  background: var(--dark);
+  color: var(--l-gray);
+  height: 3rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.table-row {
+  margin: 0.1rem auto;
+  width: 62vw;
+  background: var(--gray2);
+  color: var(--dark);
+  height: 2rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.table-item {
+  text-align: center;
+  flex: 1;
+}
+
+.popup {
+  width: 40vw;
+  height: 30vh;
+  background: var(--lightOpacity);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 1s;
+  border-radius: 1rem;
+  box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.75);
+  color: var(--dark);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 1rem;
+  font-size: 1.5rem;
+}
