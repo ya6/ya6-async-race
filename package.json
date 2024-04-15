@@ -9,7 +9,7 @@
     "install:client": "npm install --prefix async-race-client",
     "install:all": "npm install & npm install --prefix async-race-api & npm install --prefix async-race-client",
     "serve:server": "npm run --prefix async-race-api start",
-    "serve:client": "cd async-race-client && ng serve ",
+    "serve:client": "cd async-race-client && ng serve --open",
     "serve:all": "concurrently \"npm run serve:server\" \"npm run serve:client\""
   },
   "keywords": [],
