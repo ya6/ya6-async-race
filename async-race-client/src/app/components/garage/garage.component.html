@@ -1,38 +1,38 @@
 <div class="container">
-    <div class ="controls-container">
-      <div>
-        <div class="cars-count">Garage ( {{cars}} cars )</div>
-        <div class="cars-count">
-        <button type="button"  data-button="pageControl prev">{{firstPage}} 	&lt; </button>
-        <button type="button"  data-button="pageControl current" disabled> {{currentPage}} </button>
-        <button type="button"  data-button="pageControl next"> &gt; {{lastPage}} </button>
-        </div>
+  <div class="controls-container">
+    <div>
+      <div class="cars-count">Garage ( {{cars.length}} cars )</div>
+      <div class="cars-count">
+        <button type="button" data-button="pageControl prev">{{firstPage}} &lt; </button>
+        <button type="button" data-button="pageControl current" disabled> {{currentPage}} </button>
+        <button type="button" data-button="pageControl next"> &gt; {{lastPage}} </button>
       </div>
-      
+    </div>
+
+    <div>
       <div>
-        <div>
         <form>
           <input type="text" name="" data-create="name" required>
-          <input type="color" class ="pick-color" data-create="color">
+          <input type="color" class="pick-color" data-create="color">
           <button type="button" class="fill-button" data-button="control create">Crete</button>
-          </form>
-          </div>
-        <div>
+        </form>
+      </div>
+      <div>
         <form>
-          <input type="text" name=""  data-update="name" required>
-          <input type="hidden" name=""  data-update-id="">
-          <input type="color" class ="pick-color" data-update="color">
+          <input type="text" name="" data-update="name" required>
+          <input type="hidden" name="" data-update-id="">
+          <input type="color" class="pick-color" data-update="color">
           <button type="button" class="fill-button" data-button="control update">Update</button>
         </form>
-          </div> 
       </div>
-      <div>
-        <button class="fill-button" data-button="control generate">Generate Cars Set</button>
-      </div>
-      <div>
-        <button class="fill-button" data-button="race race">Race</button>
-        <button class="fill-button" data-button="race reset">Reset</button>
-      </div> 
     </div>
-      <app-tracs-box />
-  </div>  
+    <div>
+      <button class="fill-button" data-button="control generate">Generate Cars Set</button>
+    </div>
+    <div>
+      <button class="fill-button" data-button="race race">Race</button>
+      <button class="fill-button" data-button="race reset">Reset</button>
+    </div>
+  </div>
+  <app-tracs-box />
+</div>
