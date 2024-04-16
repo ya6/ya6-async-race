@@ -1,0 +1,21 @@
+<!-- <div class="car-track brd"  data-track="${index}" style="height:${height}px;"> -->
+<div class="car-track" [attr.data-track]="index" style="height:100px;">
+	<div style="display: flex">
+		<div class="control-remote">
+			<button class="track-button" data-button="control select" [attr.data-id]="id" [attr.data-name]="name"
+				[attr.data-color]="color">Select</button>
+			<button class="track-button" data-button="control del" [attr.data-id]="id">del</button>
+			<button class="track-button" data-button="control run" [attr.data-id]="id">Run</button>
+			<button class="track-button" data-button="control back" [attr.data-id]="id">Back</button>
+		</div>
+		<div class="" style="width: 100%">
+			<div class="car-name">{{name}}</div>
+			<!-- <div style="width: 100%; height: ${top}px; background: linear-gradient(0deg, rgba(240,240,240,1) 0%, -->
+			<div style="width: 100%; height: 30px; background: linear-gradient(0deg, rgba(240,240,240,1) 0%,
+      rgba(100,100,100,1) 100%); opacity: 1">
+			</div>
+			<!-- <div style="width: 100%;height: ${bottom}px; background: black;"></div> -->
+			<div style="width: 100%; height: 5px; background: black;"></div>
+		</div>
+	</div>
+</div>
