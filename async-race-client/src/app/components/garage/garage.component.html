@@ -3,9 +3,11 @@
     <div>
       <div class="cars-count">Garage ( {{cars.length}} cars )</div>
       <div class="cars-count">
-        <button type="button" data-button="pageControl prev">{{firstPage}} &lt; </button>
-        <button type="button" data-button="pageControl current" disabled> {{currentPage}} </button>
-        <button type="button" data-button="pageControl next"> &gt; {{lastPage}} </button>
+        <button type="button" (click)="prevPage()" [disabled]="pagination.currentPage==1">{{pagination.firstPage}} &lt;
+        </button>
+        <button type="button" disabled> {{pagination.currentPage}} </button>
+        <button type="button" (click)="nextPage()" [disabled]="pagination.currentPage === pagination.lastPage"> &gt;
+          {{pagination.lastPage}} </button>
       </div>
     </div>
 
@@ -30,9 +32,20 @@
       <button class="fill-button" data-button="control generate">Generate Cars Set</button>
     </div>
     <div>
-      <button class="fill-button" data-button="race race">Race</button>
-      <button class="fill-button" data-button="race reset">Reset</button>
+      <button class="fill-button" (click)="startRace()">Race</button>
+      <button class="fill-button" (click)="resetRace()">Reset</button>
     </div>
   </div>
-  <app-tracs-box />
+
+  <div class="tracks-container">
+
+    @for (car of cars | slice: pagination.start : pagination.end; track car.id) {
+    <app-track [car]="car" [trackSize]="trackSize">
+      <app-car [car]="car" [trackSize]="trackSize" />
+    </app-track>
+    } @empty {
+    <li>There are no items.</li>
+    }
+
+  </div>
 </div>

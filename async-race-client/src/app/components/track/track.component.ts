@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Car, TrackSize } from '../../interfaces/interfaces';
 
 @Component({
   selector: 'app-track',
@@ -8,8 +9,6 @@ import { Component } from '@angular/core';
   styleUrl: './track.component.scss',
 })
 export class TrackComponent {
-  name = 'mersedes';
-  index = 1;
-  id = 1;
-  color = 'red';
+  @Input() car!: Car;
+  @Input() trackSize!: TrackSize;
 }

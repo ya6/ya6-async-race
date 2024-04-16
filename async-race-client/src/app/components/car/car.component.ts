@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Car, TrackSize } from '../../interfaces/interfaces';
 
 @Component({
   selector: 'app-car',
@@ -8,7 +9,12 @@ import { Component } from '@angular/core';
   styleUrl: './car.component.scss',
 })
 export class CarComponent {
-  id = 1;
-  color = 'red';
-  name = 'mersedes';
+  @Input() car!: Car;
+  @Input() trackSize!: TrackSize;
+
+  move() {}
+
+  //  const way = document.body.clientWidth;
+  //     car.style.transform = `translateX(${way - 250}px)`;
+  //     car.style.transition = `all ease-in ${time}s`;
 }
