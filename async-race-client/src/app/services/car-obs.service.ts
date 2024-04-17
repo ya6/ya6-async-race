@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import config from '../config';
 
 @Injectable()
@@ -8,20 +8,31 @@ export class CarObsService {
   constructor(private http: HttpClient) {}
 
   getAll$() {
-    // this.set100$();
     const source$: Observable<any> = this.http.get(config.garageUrl);
     return source$;
   }
 
-  set100$() {
-    const { names, colors } = config;
-    for (let index = 0; index < 100; index++) {
+  gen100Cars$(n = 5) {
+    console.log('gen100Cars$');
+
+    const { names, models, colors } = config;
+    const newCars = [];
+    for (let index = 0; index < n; index++) {
       const newCar = {
-        name: names.at(this.rand_0_10()),
+        name: `${names.at(this.rand_0_10())} - ${models.at(this.rand_0_10())}`,
         color: colors.at(this.rand_0_10()),
       };
-      console.log(newCar);
+      newCars.push(newCar);
     }
+    const observables: Observable<any>[] = newCars.map((car) =>
+      this.http.post(config.garageUrl, car)
+    );
+
+    forkJoin(observables).subscribe();
+  }
+
+  delete(id: number) {
+    this.http.delete(config.garageUrl + id).subscribe();
   }
 
   getRandom(min: number, max: number): number {

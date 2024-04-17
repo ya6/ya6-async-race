@@ -1,21 +1,22 @@
 <div class="car-track" [attr.data-track]="car.id"
-	[style.height.px]="trackSize?.trackHeight ? trackSize.trackHeight : '30px'">
+	[style.height.px]="trackSize.trackHeight ? trackSize.trackHeight : '30px'">
 	<div style="display: flex">
 		<div class="control-remote">
-			<button class="track-button" data-button="control select" [attr.data-id]="car.id"
+			<button class="track-button" (click)="handler($event, car.id, 'select' )" [attr.data-id]="car.id"
 				[attr.data-name]="car.name" [attr.data-color]="car.color">Select</button>
-			<button class="track-button" data-button="control del" [attr.data-id]="car.id">Del</button>
-			<button class="track-button" data-button="control run" [attr.data-id]="car.id">Run</button>
-			<button class="track-button" data-button="control back" [attr.data-id]="car.id">Back</button>
+			<button class="track-button" (click)="handler($event, car.id, 'del' )" [attr.data-id]="car.id">Del</button>
+			<button class="track-button" (click)="handler($event, car.id, 'run' )" [attr.data-id]="car.id">Run</button>
+			<button class="track-button" (click)="handler($event, car.id, 'back' )"
+				[attr.data-id]="car.id">Back</button>
 		</div>
 		<div class="" style="width: 100%">
 			<div class="car-name">{{car.name}} - {{car.id}}</div>
 			<div style="width: 100%; background: linear-gradient(0deg, rgba(240,240,240,1) 0%,
-      rgba(100,100,100,1) 100%); opacity: 1" [style.height.px]="trackSize?.trackTop ? trackSize.trackTop  : '20px'">
+      rgba(100,100,100,1) 100%); opacity: 1" [style.height.px]="trackSize.trackTop ? trackSize.trackTop  : '20px'">
 			</div>
 			<ng-content />
 			<div style="width: 100%; background: black;"
-				[style.height.px]="trackSize?.trackBottom ? trackSize.trackBottom  : '10px'"></div>
+				[style.height.px]="trackSize.trackBottom ? trackSize.trackBottom  : '10px'"></div>
 		</div>
 	</div>
 </div>

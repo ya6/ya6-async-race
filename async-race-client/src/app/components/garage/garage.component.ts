@@ -1,5 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CarService } from '../../services/car.service';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  OnChanges,
+  DoCheck,
+} from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 import { TrackComponent } from '../track/track.component';
 import { Car, TrackSize } from '../../interfaces/interfaces';
@@ -7,22 +13,33 @@ import { PositioningService } from '../../services/positioning.service';
 import { CarComponent } from '../car/car.component';
 import config from '../../config';
 import { CarsStore } from '../../services/cars.store';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-garage',
   standalone: true,
-  imports: [CommonModule, TrackComponent, CarComponent],
+  imports: [CommonModule, TrackComponent, CarComponent, FormsModule],
   templateUrl: './garage.component.html',
   styleUrl: './garage.component.scss',
 })
-export class GarageComponent implements OnInit, OnDestroy {
+export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
   constructor(
-    private carService: CarService,
     private positioningService: PositioningService,
     public carsStore: CarsStore
   ) {
-    carsStore.cars$.subscribe((cars) => (this.cars = cars));
+    this.subscribtions.add(
+      this.carsStore.cars$.subscribe((cars) => (this.cars = cars))
+    );
+  }
+  creteCarData = {
+    name: '',
+    color: '#008800',
+    
+  };
+
+  onSubmit(form: any) {
+    console.log(form, this.creteCarData);
   }
 
   cars: Car[] = [];
@@ -41,10 +58,7 @@ export class GarageComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     console.log('garage ngOnItit');
     this.trackSize = await this.positioningService.getTrackSizes();
-    this.subscribtions.add(
-      this.carsStore.cars$.subscribe((cars) => (this.cars = cars))
-    );
-    // this.cars = await this.carService.getAll();
+
     this.pagination.lastPage = Math.ceil(
       this.cars.length / this.pagination.pageSize
     );
@@ -79,6 +93,18 @@ export class GarageComponent implements OnInit, OnDestroy {
     this.pagination.currentPage += 1;
     this.pagination.start += this.pagination.pageSize;
     this.pagination.end += this.pagination.pageSize;
+  }
+
+  async generateCars() {
+    console.log('generateCars');
+    this.carsStore.gen100Cars();
+  }
+
+  ngOnChanges() {
+    console.log('ngOnChanges');
+  }
+  async ngDoCheck() {
+    console.log('ngDoCheck');
   }
 
   ngOnDestroy(): void {

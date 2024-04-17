@@ -10,15 +10,26 @@ export class CarsStore extends Store<Car[]> {
     super([]);
   }
 
-  async getAll() {
+  getAll() {
     this.carObsService.getAll$().subscribe((cars) => {
       this.setValue(cars);
     });
   }
 
+  gen100Cars() {
+    this.carObsService.gen100Cars$();
+    this.getAll();
+  }
+
+  delete(id: number) {
+    this.carObsService.delete(id);
+    this.getAll();
+  }
+
   get cars$(): Observable<Car[]> {
     return this.value$;
   }
+
   set cars$(value: Car[]) {
     this.setValue(value);
   }

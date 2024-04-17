@@ -8,10 +8,10 @@
 
     <div>
       <div>
-        <form>
-          <input type="text" name="" data-create="name" required>
-          <input type="color" class="pick-color" data-create="color">
-          <button type="button" class="fill-button" data-button="control create">Crete</button>
+        <form #creteForm="ngForm" (ngSubmit)="onSubmit(creteForm)">
+          <input type="text" name="creteName" [(ngModel)]="creteCarData.name" required>
+          <input type="color" name="creteColor" [(ngModel)]="creteCarData.color" class="pick-color">
+          <button type="submit" class="fill-button">Crete</button>
         </form>
       </div>
       <div>
@@ -25,7 +25,7 @@
     </div>
 
     <div>
-      <button class="fill-button" data-button="control generate">Generate Cars Set</button>
+      <button class="fill-button" (click)="generateCars()">Generate Cars Set</button>
     </div>
 
     <div>
@@ -35,7 +35,7 @@
           &lt;
         </button>
         <button type="button" disabled
-          style="width: 1rem; margin: 0 0.3rem; padding: 2px 20px 2px 14px ;  text-align: left;">
+          style="width: 1rem; margin: 0 0.3rem; padding: 2px 20px 2px 14px ;  text-align: left; font-weight: 800; background-color: lightgreen; border: none;">
           {{pagination.currentPage}} </button>
         <button type="button" (click)="nextPage()" [disabled]="pagination.currentPage === pagination.lastPage">&gt;
           {{pagination.lastPage}} </button>
