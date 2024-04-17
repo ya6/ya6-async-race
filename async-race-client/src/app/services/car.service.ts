@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, firstValueFrom, lastValueFrom, take } from 'rxjs';
 import { Car } from '../interfaces/interfaces';
+import config from '../config';
 
 const cars = [
   { id: 1, name: 'Mercedes', color: 'black' },
@@ -22,7 +23,6 @@ export class CarService {
   constructor(private http: HttpClient) {}
 
   // async getAll() {
-  //   this.getServerAll();
   //   const upgCars = cars.map((car) => {
   //     return { ...car, offsetX: 0, time: 0 };
   //   });
@@ -31,10 +31,22 @@ export class CarService {
 
   async getAll() {
     const source$: Observable<any> = this.http
-      .get('http://localhost:3000/garage')
+      .get(config.garageUrl)
       .pipe(take(1));
-
     const cars = await lastValueFrom(source$);
     return cars.map((car: Car) => ({ ...car, offsetX: 0, time: 0 }));
   }
+  getAll$() {
+    const source$: Observable<any> = this.http.get(config.garageUrl);
+
+    return source$;
+  }
+
+  // async getById(id: Number) {
+  //   const source$: Observable<any> = this.http
+  //     .get(`${config.garageUrl}${id}`)
+  //     .pipe(take(1));
+  //   const car = await lastValueFrom(source$);
+  //   return { ...car, offsetX: 0, time: 0 };
+  // }
 }
