@@ -26,7 +26,7 @@ export class PositioningService {
   updateViewportSize() {
     this.innerWidth = this.document.documentElement.clientWidth;
     this.innerHeight = this.document.documentElement.clientHeight;
-    console.log(this.innerWidth, this.innerHeight);
+    console.log('passitioning ', this.innerWidth, this.innerHeight);
   }
 
   getTrackSizes() {

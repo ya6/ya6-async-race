@@ -6,10 +6,10 @@
   "scripts": {
     "install:mono": "npm install",
     "install:server": "npm install --prefix async-race-api",
-    "install:client": "npm install --prefix async-race-client",
+    "install:client": "npm install --prefix async-race-client-csr",
     "install:all": "npm install & npm install --prefix async-race-api & npm install --prefix async-race-client",
     "serve:server": "npm run --prefix async-race-api start",
-    "serve:client": "cd async-race-client && ng serve --open",
+    "serve:client": "cd async-race-client-csr && ng serve --open",
     "serve:all": "concurrently \"npm run serve:server\" \"npm run serve:client\""
   },
   "keywords": [],

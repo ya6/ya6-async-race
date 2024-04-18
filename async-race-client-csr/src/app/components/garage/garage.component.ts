@@ -12,9 +12,8 @@ import { Car, TrackSize } from '../../interfaces/interfaces';
 import { PositioningService } from '../../services/positioning.service';
 import { CarComponent } from '../car/car.component';
 import config from '../../config';
-import { CarsStore } from '../../services/cars.store';
-import { Observable, Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { CarService } from '../../services/car.service';
 
 @Component({
   selector: 'app-garage',
@@ -25,45 +24,21 @@ import { FormsModule } from '@angular/forms';
 })
 export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
   constructor(
-    private positioningService: PositioningService,
-    public carsStore: CarsStore
-  ) {
-    this.subscribtions.add(
-      this.carsStore.cars$.subscribe((cars) => (this.cars = cars))
-    );
-  }
+    private carService: CarService,
+    private positioningService: PositioningService
+  ) {}
   creteCarData = {
     name: '',
-    color: '#008800',
+    color: '#fffff',
   };
 
   updateCarData = {
     id: 0,
     name: '',
-    color: '#008800',
+    color: '#fffff',
   };
 
-  handleSelect(updCar: Car) {
-    this.updateCarData = { ...updCar };
-  }
-
-  hanldleCreate(form: any) {
-    if (!this.creteCarData.name) {
-      this.creteCarData.name = 'Noname car';
-    }
-    this.carsStore.create(this.creteCarData.name, this.creteCarData.color);
-  }
-
-  hanldleUpdate(form: any) {
-  
-    if (!this.updateCarData.name) {
-      this.creteCarData.name = 'Noname updated car';
-    }
-    this.carsStore.update(this.updateCarData);
-  }
-
   cars: Car[] = [];
-  subscribtions: Subscription = new Subscription();
 
   trackSize!: TrackSize;
   pagination = {
@@ -75,9 +50,34 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
     lastPage: 10,
   };
 
+  handleSelect(updCar: Car) {
+    this.updateCarData = { ...updCar };
+  }
+
+  async handleCreate(form: any) {
+    if (!this.creteCarData.name) {
+      this.creteCarData.name = 'NoName';
+    }
+    await this.carService.create(
+      this.creteCarData.name,
+      this.creteCarData.color
+    );
+    this.cars = await this.carService.getAll();
+  }
+
+  async handleUpdate(form: any) {
+    if (!this.updateCarData.name) {
+      this.creteCarData.name = 'NoNameUpdated';
+    }
+    await this.carService.update(this.updateCarData);
+    this.cars = await this.carService.getAll();
+  }
+
   async ngOnInit() {
     console.log('garage ngOnItit');
-    this.trackSize = await this.positioningService.getTrackSizes();
+
+    this.cars = await this.carService.getAll();
+    this.trackSize = this.positioningService.getTrackSizes();
 
     this.pagination.lastPage = Math.ceil(
       this.cars.length / this.pagination.pageSize
@@ -85,22 +85,23 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
   }
 
   startRace() {
+    this.trackSize = this.positioningService.getTrackSizes();
     this.cars = this.cars.map((car: Car) => {
       return {
         ...car,
         time: 1,
-        offsetX: Math.round(this.trackSize.innerWidth * 0.75),
+        offsetX: Math.round(this.trackSize.innerWidth - 300),
       };
     });
 
-    this.carsStore.cars$ = this.cars;
+    // this.carsStore.cars$ = this.cars;
   }
 
   resetRace() {
     this.cars = this.cars.map((car: Car) => {
       return { ...car, time: 0, offsetX: 0 };
     });
-    this.carsStore.cars$ = this.cars;
+    // this.carsStore.cars$ = this.cars;
   }
 
   prevPage() {
@@ -117,10 +118,10 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
 
   async generateCars() {
     console.log('generateCars');
-    this.carsStore.gen100Cars();
+    // this.carsStore.gen100Cars();
   }
 
-  ngOnChanges() {
+  async ngOnChanges() {
     console.log('ngOnChanges');
   }
   async ngDoCheck() {
@@ -128,6 +129,6 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
   }
 
   ngOnDestroy(): void {
-    this.subscribtions.unsubscribe();
+    console.log('ngOnDestroy');
   }
 }

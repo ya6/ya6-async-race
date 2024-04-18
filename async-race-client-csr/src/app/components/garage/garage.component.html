@@ -8,14 +8,14 @@
 
     <div>
       <div>
-        <form #creteForm="ngForm" (ngSubmit)="hanldleCreate(creteForm)">
+        <form #creteForm="ngForm" (ngSubmit)="handleCreate(creteForm)">
           <input type="text" name="creteName" [(ngModel)]="creteCarData.name" required>
           <input type="color" name="creteColor" [(ngModel)]="creteCarData.color" class="pick-color">
           <button type="submit" class="fill-button">Crete</button>
         </form>
       </div>
       <div>
-        <form #updateForm="ngForm" (ngSubmit)="hanldleUpdate(updateForm)">
+        <form #updateForm="ngForm" (ngSubmit)="handleUpdate(updateForm)">
           <input type="text" name="updateName" [(ngModel)]="updateCarData.name" required>
           <input type="hidden" name="updateId" [(ngModel)]="updateCarData.id">
           <input type="color" name="updateColor" class="pick-color" [(ngModel)]="updateCarData.color">
