@@ -16,6 +16,16 @@ export class CarsStore extends Store<Car[]> {
     });
   }
 
+  create(name: string, color: string) {
+    this.carObsService.create$(name, color);
+    this.getAll();
+  } 
+
+  update(updCar: Car) {
+    this.carObsService.update$(updCar);
+    this.getAll();
+  } 
+
   gen100Cars() {
     this.carObsService.gen100Cars$();
     this.getAll();

@@ -1,5 +1,5 @@
 export interface BaseEntity {
-  id: number | null;
+  id: number;
 }
 
 export interface Car extends BaseEntity {

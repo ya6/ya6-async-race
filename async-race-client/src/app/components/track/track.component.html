@@ -2,11 +2,11 @@
 	[style.height.px]="trackSize.trackHeight ? trackSize.trackHeight : '30px'">
 	<div style="display: flex">
 		<div class="control-remote">
-			<button class="track-button" (click)="handler($event, car.id, 'select' )" [attr.data-id]="car.id"
+			<button class="track-button" (click)="handler($event, car , 'select' )" [attr.data-id]="car.id"
 				[attr.data-name]="car.name" [attr.data-color]="car.color">Select</button>
-			<button class="track-button" (click)="handler($event, car.id, 'del' )" [attr.data-id]="car.id">Del</button>
-			<button class="track-button" (click)="handler($event, car.id, 'run' )" [attr.data-id]="car.id">Run</button>
-			<button class="track-button" (click)="handler($event, car.id, 'back' )"
+			<button class="track-button" (click)="handler($event, car, 'del' )" [attr.data-id]="car.id">Del</button>
+			<button class="track-button" (click)="handler($event, car, 'run' )" [attr.data-id]="car.id">Run</button>
+			<button class="track-button" (click)="handler($event, car, 'back' )"
 				[attr.data-id]="car.id">Back</button>
 		</div>
 		<div class="" style="width: 100%">

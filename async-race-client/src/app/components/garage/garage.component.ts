@@ -35,11 +35,31 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
   creteCarData = {
     name: '',
     color: '#008800',
-    
   };
 
-  onSubmit(form: any) {
-    console.log(form, this.creteCarData);
+  updateCarData = {
+    id: 0,
+    name: '',
+    color: '#008800',
+  };
+
+  handleSelect(updCar: Car) {
+    this.updateCarData = { ...updCar };
+  }
+
+  hanldleCreate(form: any) {
+    if (!this.creteCarData.name) {
+      this.creteCarData.name = 'Noname car';
+    }
+    this.carsStore.create(this.creteCarData.name, this.creteCarData.color);
+  }
+
+  hanldleUpdate(form: any) {
+  
+    if (!this.updateCarData.name) {
+      this.creteCarData.name = 'Noname updated car';
+    }
+    this.carsStore.update(this.updateCarData);
   }
 
   cars: Car[] = [];

@@ -8,18 +8,18 @@
 
     <div>
       <div>
-        <form #creteForm="ngForm" (ngSubmit)="onSubmit(creteForm)">
+        <form #creteForm="ngForm" (ngSubmit)="hanldleCreate(creteForm)">
           <input type="text" name="creteName" [(ngModel)]="creteCarData.name" required>
           <input type="color" name="creteColor" [(ngModel)]="creteCarData.color" class="pick-color">
           <button type="submit" class="fill-button">Crete</button>
         </form>
       </div>
       <div>
-        <form>
-          <input type="text" name="" data-update="name" required>
-          <input type="hidden" name="" data-update-id="">
-          <input type="color" class="pick-color" data-update="color">
-          <button type="button" class="fill-button" data-button="control update">Update</button>
+        <form #updateForm="ngForm" (ngSubmit)="hanldleUpdate(updateForm)">
+          <input type="text" name="updateName" [(ngModel)]="updateCarData.name" required>
+          <input type="hidden" name="updateId" [(ngModel)]="updateCarData.id">
+          <input type="color" name="updateColor" class="pick-color" [(ngModel)]="updateCarData.color">
+          <button type="submit" class="fill-button">Update</button>
         </form>
       </div>
     </div>
@@ -47,7 +47,7 @@
   <div class="tracks-container">
 
     @for (car of cars | slice: pagination.start : pagination.end; track car.id) {
-    <app-track [car]="car" [trackSize]="trackSize">
+    <app-track [car]="car" [trackSize]="trackSize" (updEvent)="handleSelect($event)">
       <app-car [car]="car" [trackSize]="trackSize" />
     </app-track>
     } @empty {

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, forkJoin } from 'rxjs';
 import config from '../config';
+import { Car } from '../interfaces/interfaces';
 
 @Injectable()
 export class CarObsService {
@@ -10,6 +11,19 @@ export class CarObsService {
   getAll$() {
     const source$: Observable<any> = this.http.get(config.garageUrl);
     return source$;
+  }
+
+  create$(name: string, color: string) {
+    this.http.post(config.garageUrl, { name, color }).subscribe();
+  }
+
+  update$(updCar: Car) {
+    this.http
+      .put(config.garageUrl + updCar.id, {
+        name: updCar.name,
+        color: updCar.color,
+      })
+      .subscribe();
   }
 
   gen100Cars$(n = 5) {

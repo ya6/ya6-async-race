@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Car, TrackSize } from '../../interfaces/interfaces';
 import { CarsStore } from '../../services/cars.store';
 
@@ -14,29 +14,30 @@ export class TrackComponent {
 
   @Input() car!: Car;
   @Input() trackSize!: TrackSize;
+  @Output() updEvent = new EventEmitter()
 
-  handler(e: Event, id: any, action: string) {
+  handler(e: Event, car: any, action: string) {
     switch (action) {
       case 'del':
-        this.carsStore.delete(id);
+        this.carsStore.delete(car.id);
         break;
+        
+        case 'select':
+          this.updEvent.emit(car)
+          break;
 
       case 'run':
-        this.carsStore.delete(id);
+        
         break;
 
       case 'back':
-        this.carsStore.delete(id);
+      
         break;
 
-      case 'select':
-        this.carsStore.delete(id);
-        break;
 
       default:
         console.log(`Sorry`);
     }
-    console.log(typeof id);
     console.log(action);
   }
 }
