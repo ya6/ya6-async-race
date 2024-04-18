@@ -7,6 +7,7 @@ export interface Car extends BaseEntity {
   color: string;
   offsetX?: number;
   time?: number;
+  move?: number;
 }
 
 export interface TrackSize {
@@ -14,5 +15,4 @@ export interface TrackSize {
   trackTop: number;
   trackBottom: number;
   innerWidth: number;
-  
 }

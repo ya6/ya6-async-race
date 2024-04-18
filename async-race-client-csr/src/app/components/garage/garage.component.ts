@@ -50,8 +50,37 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
     lastPage: 10,
   };
 
-  handleSelect(updCar: Car) {
-    this.updateCarData = { ...updCar };
+  async ngOnInit() {
+    console.log('garage ngOnItit');
+
+    this.cars = await this.carService.getAll();
+    this.trackSize = this.positioningService.getTrackSizes();
+
+    this.setLastPage();
+  }
+
+  handleButtons(data: any) {
+    const { car, action } = data;
+    switch (action) {
+      case 'del':
+        this.handleDelete(car.id);
+        break;
+
+      case 'select':
+        this.updateCarData = { ...car };
+        break;
+
+      case 'run':
+        this.startEngin(car);
+        break;
+
+      case 'back':
+        this.stopEngin(car);
+        break;
+
+      default:
+        console.log(`no Action found`);
+    }
   }
 
   async handleCreate(form: any) {
@@ -63,6 +92,7 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
       this.creteCarData.color
     );
     this.cars = await this.carService.getAll();
+    this.setLastPage();
   }
 
   async handleUpdate(form: any) {
@@ -71,30 +101,59 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
     }
     await this.carService.update(this.updateCarData);
     this.cars = await this.carService.getAll();
+    this.setLastPage();
   }
 
-  async ngOnInit() {
-    console.log('garage ngOnItit');
-
+  async handleDelete(id: number) {
+    await this.carService.delete(id);
     this.cars = await this.carService.getAll();
-    this.trackSize = this.positioningService.getTrackSizes();
+    this.setLastPage();
+  }
 
+  async handleGenerateSet(n: number) {
+    await this.carService.createSet(n);
+    this.cars = await this.carService.getAll();
+    this.setLastPage();
+  }
+
+  async startRace() {
+    console.log(this.pagination.start, this.pagination.end);
+    const toEngineCars = this.cars.slice(
+      this.pagination.start,
+      this.pagination.end
+    );
+    console.log(toEngineCars);
+    const data = toEngineCars.map((el) => ({ id: el.id, status: 'started' }));
+    console.log(data);
+
+    const result = await this.carService.engineControlSet(data);
+    console.log(result);
+
+    // this.trackSize = this.positioningService.getTrackSizes();
+    // this.cars = this.cars.map((car: Car) => {
+    //   return {
+    //     ...car,
+    //     time: 1,
+    //     offsetX: Math.round(this.trackSize.innerWidth - 300),
+    //     move: 1,
+    //   };
+    // });
+
+    // this.carsStore.cars$ = this.cars;
+
+    // ! get data
+    // get ids
+    // get fetch data
+
+    // !run race
+    // fetch move
+    //set move
+  }
+
+  setLastPage() {
     this.pagination.lastPage = Math.ceil(
       this.cars.length / this.pagination.pageSize
     );
-  }
-
-  startRace() {
-    this.trackSize = this.positioningService.getTrackSizes();
-    this.cars = this.cars.map((car: Car) => {
-      return {
-        ...car,
-        time: 1,
-        offsetX: Math.round(this.trackSize.innerWidth - 300),
-      };
-    });
-
-    // this.carsStore.cars$ = this.cars;
   }
 
   resetRace() {
@@ -102,6 +161,22 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
       return { ...car, time: 0, offsetX: 0 };
     });
     // this.carsStore.cars$ = this.cars;
+  }
+
+  async startEngin(car: Car) {
+    const response = await this.carService.engineControl({
+      id: car.id,
+      status: 'started',
+    });
+    console.log(response);
+  }
+
+  async stopEngin(car: Car) {
+    const response = await this.carService.engineControl({
+      id: car.id,
+      status: 'stopped',
+    });
+    console.log(response);
   }
 
   prevPage() {
@@ -114,11 +189,6 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
     this.pagination.currentPage += 1;
     this.pagination.start += this.pagination.pageSize;
     this.pagination.end += this.pagination.pageSize;
-  }
-
-  async generateCars() {
-    console.log('generateCars');
-    // this.carsStore.gen100Cars();
   }
 
   async ngOnChanges() {

@@ -1,4 +1,4 @@
-<svg [style.transition]="'transform '+car.time+'s'" [style.transform]="'translateX(' + car.offsetX + 'px)'" class="car"
+<svg [style.transition]="'transform '+car.time+'s'" [style.transform]="'translateX(' + car.offsetX! * car.move! + 'px)'" class="car"
 	[attr.data-car]="car.id" [attr.data-name]="car.name"
 	[attr.height]="trackSize.trackHeight ? trackSize.trackHeight / 2 : '30px'" clip-rule="evenodd" fill-rule="evenodd"
 	image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision"

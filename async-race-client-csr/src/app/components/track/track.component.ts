@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Car, TrackSize } from '../../interfaces/interfaces';
+import { CarService } from '../../services/car.service';
 
 @Component({
   selector: 'app-track',
@@ -9,7 +10,7 @@ import { Car, TrackSize } from '../../interfaces/interfaces';
   styleUrl: './track.component.scss',
 })
 export class TrackComponent {
-  constructor() {}
+  constructor(private carService: CarService) {}
 
   @Input() car!: Car;
   @Input() trackSize!: TrackSize;
@@ -18,22 +19,24 @@ export class TrackComponent {
   handler(e: Event, car: any, action: string) {
     switch (action) {
       case 'del':
-        // this.carsStore.delete(car.id);
+        this.updEvent.emit({ car, action: 'del' });
         break;
 
       case 'select':
-        this.updEvent.emit(car);
+        this.updEvent.emit({ car, action: 'select' });
         break;
-
-      case 'run':
+        
+        case 'run':
+        this.updEvent.emit({ car, action: 'run' });
         break;
-
-      case 'back':
+        
+        case 'back':
+        this.updEvent.emit({ car, action: 'back' });
         break;
 
       default:
         console.log(`Sorry`);
     }
-    console.log(action);
+    
   }
 }

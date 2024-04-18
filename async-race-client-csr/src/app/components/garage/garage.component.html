@@ -25,7 +25,7 @@
     </div>
 
     <div>
-      <button class="fill-button" (click)="generateCars()">Generate Cars Set</button>
+      <button class="fill-button" (click)="handleGenerateSet(5)">Generate Cars Set</button>
     </div>
 
     <div>
@@ -47,7 +47,7 @@
   <div class="tracks-container">
 
     @for (car of cars | slice: pagination.start : pagination.end; track car.id) {
-    <app-track [car]="car" [trackSize]="trackSize" (updEvent)="handleSelect($event)">
+    <app-track [car]="car" [trackSize]="trackSize" (updEvent)="handleButtons($event)">
       <app-car [car]="car" [trackSize]="trackSize" />
     </app-track>
     } @empty {
