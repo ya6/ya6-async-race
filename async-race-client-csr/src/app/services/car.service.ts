@@ -16,8 +16,8 @@ export class CarService {
   async getAll() {
     const response = await fetch(config.garageUrl);
     const cars = await response.json();
-    const upgCars = cars.map((car: Car) => {
-      return { ...car, offsetX: 0, time: 0, move: 0 };
+    const upgCars = cars.map((car: Car, idx: number) => {
+      return { ...car, offsetX: 0, time: 0, move: 0, dbIdx: idx };
     });
 
     return upgCars;
@@ -81,6 +81,24 @@ export class CarService {
     return await Promise.all(jsons);
   }
 
+  async __engineDriveSet(data: any[]) {
+    const allRequests = data.map((el: any) => {
+      const { id, status } = el;
+      return fetch(`${config.engineUrl}?id=${id}&status=${status}`, {
+        method: 'PATCH',
+      });
+    });
+    const responses = await Promise.allSettled(allRequests);
+    console.log('1v-->', responses);
+
+    const jsons = responses.map((el: any) => {
+      return new Promise((resolve) => resolve(el.json()));
+    });
+    const res = await Promise.allSettled(jsons);
+
+    return res;
+  }
+
   async engineControl(data: any) {
     const { id, status } = data;
 
@@ -91,6 +109,22 @@ export class CarService {
       }
     );
     return await response.json();
+  }
+
+  async engineDrive(data: any) {
+    const { id, status, dbIdx } = data;
+
+    try {
+      const response = await fetch(
+        `${config.engineUrl}?id=${Number(id)}&status=${status}`,
+        {
+          method: 'PATCH',
+        }
+      );
+      return await response.json();
+    } catch (error) {
+      return { success: false, dbIdx: dbIdx };
+    }
   }
 
   generateSet(n = 5) {

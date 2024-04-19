@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { Car, TrackSize } from '../../interfaces/interfaces';
 
 @Component({
@@ -9,12 +9,11 @@ import { Car, TrackSize } from '../../interfaces/interfaces';
   styleUrl: './car.component.scss',
 })
 export class CarComponent {
+  constructor(private cdr: ChangeDetectorRef) {
+    
+  }
+  
+
   @Input() car!: Car;
   @Input() trackSize!: TrackSize;
-
-  move() {}
-
-  //  const way = document.body.clientWidth;
-  //     car.style.transform = `translateX(${way - 250}px)`;
-  //     car.style.transition = `all ease-in ${time}s`;
 }

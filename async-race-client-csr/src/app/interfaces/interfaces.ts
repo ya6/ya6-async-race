@@ -8,6 +8,7 @@ export interface Car extends BaseEntity {
   offsetX?: number;
   time?: number;
   move?: number;
+  dbIdx?: number;
 }
 
 export interface TrackSize {
@@ -15,4 +16,5 @@ export interface TrackSize {
   trackTop: number;
   trackBottom: number;
   innerWidth: number;
+  trackLength: number;
 }

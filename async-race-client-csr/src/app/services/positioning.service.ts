@@ -25,6 +25,13 @@ export class PositioningService {
     );
     const trackBottom = Math.trunc(trackHeight / 30);
     const trackTop = trackHeight / 3;
-    return { innerWidth: this.innerWidth, trackHeight, trackTop, trackBottom };
+    const trackLength = Math.round(this.innerWidth - 300);
+    return {
+      innerWidth: this.innerWidth,
+      trackHeight,
+      trackTop,
+      trackBottom,
+      trackLength,
+    };
   }
 }

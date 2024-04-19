@@ -27,6 +27,8 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
     private carService: CarService,
     private positioningService: PositioningService
   ) {}
+
+  isReset = false;
   creteCarData = {
     name: '',
     color: '#fffff',
@@ -41,6 +43,7 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
   cars: Car[] = [];
 
   trackSize!: TrackSize;
+
   pagination = {
     firstPage: 1,
     currentPage: config.startPage,
@@ -51,7 +54,7 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
   };
 
   async ngOnInit() {
-    console.log('garage ngOnItit');
+    // console.log('garage ngOnItit');
 
     this.cars = await this.carService.getAll();
     this.trackSize = this.positioningService.getTrackSizes();
@@ -117,37 +120,52 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
   }
 
   async startRace() {
-    console.log(this.pagination.start, this.pagination.end);
+    this.isReset = false;
+    this.trackSize = this.positioningService.getTrackSizes();
+   
     const toEngineCars = this.cars.slice(
       this.pagination.start,
       this.pagination.end
     );
-    console.log(toEngineCars);
+
     const data = toEngineCars.map((el) => ({ id: el.id, status: 'started' }));
-    console.log(data);
 
-    const result = await this.carService.engineControlSet(data);
-    console.log(result);
+    const result: any = await this.carService.engineControlSet(data);
+   
 
-    // this.trackSize = this.positioningService.getTrackSizes();
-    // this.cars = this.cars.map((car: Car) => {
-    //   return {
-    //     ...car,
-    //     time: 1,
-    //     offsetX: Math.round(this.trackSize.innerWidth - 300),
-    //     move: 1,
-    //   };
-    // });
+    for (
+      let index = this.pagination.start;
+      index < this.pagination.start + toEngineCars.length;
+      index++
+    ) {
+      this.cars[index].time = 1000 / result[index].velocity;
 
-    // this.carsStore.cars$ = this.cars;
+      this.cars[index].move = 1;
+      this.cars[index].offsetX = this.trackSize.trackLength;
+    }
 
-    // ! get data
-    // get ids
-    // get fetch data
+    for (const car of toEngineCars) {
+      this.drive(car);
+    }
+  }
 
-    // !run race
-    // fetch move
-    //set move
+  async drive(car: Car) {
+    const drRes = await this.carService.engineDrive({
+      id: car.id,
+      dbIdx: car.dbIdx,
+      status: 'drive',
+    });
+
+    if (!drRes.success) {
+      this.cars[drRes.dbIdx].time = 10000;
+      this.cars[drRes.dbIdx].offsetX = 1;
+    }
+  }
+
+  resetRace() {
+    this.cars = this.cars.map((car: Car) => {
+      return { ...car, time: 0, offsetX: 0 };
+    });
   }
 
   setLastPage() {
@@ -156,19 +174,11 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
     );
   }
 
-  resetRace() {
-    this.cars = this.cars.map((car: Car) => {
-      return { ...car, time: 0, offsetX: 0 };
-    });
-    // this.carsStore.cars$ = this.cars;
-  }
-
   async startEngin(car: Car) {
     const response = await this.carService.engineControl({
       id: car.id,
       status: 'started',
     });
-    console.log(response);
   }
 
   async stopEngin(car: Car) {
@@ -176,7 +186,6 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
       id: car.id,
       status: 'stopped',
     });
-    console.log(response);
   }
 
   prevPage() {
@@ -192,13 +201,13 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
   }
 
   async ngOnChanges() {
-    console.log('ngOnChanges');
+    // console.log('ngOnChanges');
   }
   async ngDoCheck() {
-    console.log('ngDoCheck');
+    // console.log('ngDoCheck');
   }
 
   ngOnDestroy(): void {
-    console.log('ngOnDestroy');
+    // console.log('ngOnDestroy');
   }
 }
