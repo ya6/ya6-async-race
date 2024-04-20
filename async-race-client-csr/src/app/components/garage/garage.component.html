@@ -54,5 +54,11 @@
     <li>There are no items.</li>
     }
 
+    @if(showWinner) {
+      <app-winner-popup [winner]="winner" [winnerTime] = 'winnerTime' />
+    }
+
+    
+
   </div>
 </div>

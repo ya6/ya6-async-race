@@ -14,21 +14,33 @@ import { CarComponent } from '../car/car.component';
 import config from '../../config';
 import { FormsModule } from '@angular/forms';
 import { CarService } from '../../services/car.service';
+import { StateService } from '../../services/state.service';
+import { WinnerPopupComponent } from '../winner-popup/winner-popup.component';
 
 @Component({
   selector: 'app-garage',
   standalone: true,
-  imports: [CommonModule, TrackComponent, CarComponent, FormsModule],
+  imports: [
+    CommonModule,
+    TrackComponent,
+    CarComponent,
+    FormsModule,
+    WinnerPopupComponent,
+  ],
   templateUrl: './garage.component.html',
   styleUrl: './garage.component.scss',
 })
 export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
   constructor(
     private carService: CarService,
-    private positioningService: PositioningService
+    private positioningService: PositioningService,
+    private stateService: StateService
   ) {}
 
-  isReset = false;
+  showWinner = false;
+  winner = '1';
+  winnerTime = 1;
+
   creteCarData = {
     name: '',
     color: '#fffff',
@@ -120,9 +132,8 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
   }
 
   async startRace() {
-    this.isReset = false;
     this.trackSize = this.positioningService.getTrackSizes();
-   
+
     const toEngineCars = this.cars.slice(
       this.pagination.start,
       this.pagination.end
@@ -131,22 +142,72 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
     const data = toEngineCars.map((el) => ({ id: el.id, status: 'started' }));
 
     const result: any = await this.carService.engineControlSet(data);
-   
 
+    const raceStats: any = { raceTime: 0, winner: null };
     for (
       let index = this.pagination.start;
       index < this.pagination.start + toEngineCars.length;
       index++
     ) {
-      this.cars[index].time = 1000 / result[index].velocity;
+      this.cars[index].time = 500 / result[index].velocity;
 
       this.cars[index].move = 1;
       this.cars[index].offsetX = this.trackSize.trackLength;
+
+      //add to state
+      raceStats[this.cars[index].id] = {
+        time: this.cars[index].time,
+        status: true,
+      };
+      if (this.cars[index].time! > raceStats.raceTime) {
+        raceStats.raceTime = this.cars[index].time;
+      }
     }
+
+    this.stateService.raceResults = raceStats;
 
     for (const car of toEngineCars) {
       this.drive(car);
     }
+
+    // winn!
+    const win = setTimeout(() => {
+      if (toEngineCars.length > 0) {
+        this.showWinner = true;
+
+        const winner = { id: 0, time: Infinity };
+        for (const key in this.stateService.raceResults) {
+          if (
+            Object.prototype.hasOwnProperty.call(
+              this.stateService.raceResults,
+              key
+            )
+          ) {
+            if (this.stateService.raceResults[key]?.status) {
+              console.log(this.stateService.raceResults[key]);
+              if (this.stateService.raceResults[key].time < winner.time) {
+                winner.time = this.stateService.raceResults[key].time;
+                winner.id = Number(key);
+              }
+            }
+          }
+        }
+        console.log('winner', winner);
+        console.log('toEngineCars', toEngineCars);
+
+        const winnerCar = toEngineCars.find((el) => el.id === winner.id);
+        if (typeof winnerCar === 'object') {
+          console.log('in, ', winnerCar!.name, winner.time);
+
+          this.winner = winnerCar!.name;
+          this.winnerTime = Number(winner.time.toFixed(2));
+        }
+      }
+      setTimeout(() => {
+        clearTimeout(win);
+        this.showWinner = false;
+      }, 3000);
+    }, raceStats.raceTime * 1000);
   }
 
   async drive(car: Car) {
@@ -159,10 +220,22 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
     if (!drRes.success) {
       this.cars[drRes.dbIdx].time = 10000;
       this.cars[drRes.dbIdx].offsetX = 1;
+
+      const tempState = { ...this.stateService.raceResults };
+      tempState[this.cars[drRes.dbIdx].id].status = false;
+      this.stateService.raceResults = { ...tempState };
     }
   }
 
-  resetRace() {
+  async resetRace() {
+    const toEngineCars = this.cars.slice(
+      this.pagination.start,
+      this.pagination.end
+    );
+
+    const data = toEngineCars.map((el) => ({ id: el.id, status: 'stopped' }));
+
+    const result: any = await this.carService.engineControlSet(data);
     this.cars = this.cars.map((car: Car) => {
       return { ...car, time: 0, offsetX: 0 };
     });
