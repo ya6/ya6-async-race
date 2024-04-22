@@ -143,13 +143,17 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
 
     const result: any = await this.carService.engineControlSet(data);
 
+   
+
     const raceStats: any = { raceTime: 0, winner: null };
+    let resultIndex = 0;
     for (
       let index = this.pagination.start;
       index < this.pagination.start + toEngineCars.length;
       index++
     ) {
-      this.cars[index].time = 500 / result[index].velocity;
+     
+      this.cars[index].time = 500 / result[resultIndex].velocity;
 
       this.cars[index].move = 1;
       this.cars[index].offsetX = this.trackSize.trackLength;
@@ -162,6 +166,7 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
       if (this.cars[index].time! > raceStats.raceTime) {
         raceStats.raceTime = this.cars[index].time;
       }
+      resultIndex +=1;
     }
 
     this.stateService.raceResults = raceStats;
