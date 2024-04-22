@@ -30,7 +30,7 @@ import { WinnerPopupComponent } from '../winner-popup/winner-popup.component';
   templateUrl: './garage.component.html',
   styleUrl: './garage.component.scss',
 })
-export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
+export class GarageComponent implements OnInit {
   constructor(
     private carService: CarService,
     private positioningService: PositioningService,
@@ -66,8 +66,6 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
   };
 
   async ngOnInit() {
-    // console.log('garage ngOnItit');
-
     this.cars = await this.carService.getAll();
     this.trackSize = this.positioningService.getTrackSizes();
 
@@ -143,8 +141,6 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
 
     const result: any = await this.carService.engineControlSet(data);
 
-   
-
     const raceStats: any = { raceTime: 0, winner: null };
     let resultIndex = 0;
     for (
@@ -152,8 +148,7 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
       index < this.pagination.start + toEngineCars.length;
       index++
     ) {
-     
-      this.cars[index].time = 500 / result[resultIndex].velocity;
+      this.cars[index].time = 400 / result[resultIndex].velocity;
 
       this.cars[index].move = 1;
       this.cars[index].offsetX = this.trackSize.trackLength;
@@ -166,7 +161,7 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
       if (this.cars[index].time! > raceStats.raceTime) {
         raceStats.raceTime = this.cars[index].time;
       }
-      resultIndex +=1;
+      resultIndex += 1;
     }
 
     this.stateService.raceResults = raceStats;
@@ -189,7 +184,6 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
             )
           ) {
             if (this.stateService.raceResults[key]?.status) {
-              console.log(this.stateService.raceResults[key]);
               if (this.stateService.raceResults[key].time < winner.time) {
                 winner.time = this.stateService.raceResults[key].time;
                 winner.id = Number(key);
@@ -197,13 +191,9 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
             }
           }
         }
-        console.log('winner', winner);
-        console.log('toEngineCars', toEngineCars);
 
         const winnerCar = toEngineCars.find((el) => el.id === winner.id);
         if (typeof winnerCar === 'object') {
-          console.log('in, ', winnerCar!.name, winner.time);
-
           this.winner = winnerCar!.name;
           this.winnerTime = Number(winner.time.toFixed(2));
         }
@@ -276,16 +266,5 @@ export class GarageComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
     this.pagination.currentPage += 1;
     this.pagination.start += this.pagination.pageSize;
     this.pagination.end += this.pagination.pageSize;
-  }
-
-  async ngOnChanges() {
-    // console.log('ngOnChanges');
-  }
-  async ngDoCheck() {
-    // console.log('ngDoCheck');
-  }
-
-  ngOnDestroy(): void {
-    // console.log('ngOnDestroy');
   }
 }

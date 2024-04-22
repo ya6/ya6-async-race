@@ -155,8 +155,9 @@ button {
 }
 .car {
   position: absolute;
-  left: var(--remote);
-  bottom: 10px;
+  margin: auto;
+  // left: var(--remote);
+  // bottom: 10px;
 }
 .car-name {
   position: absolute;

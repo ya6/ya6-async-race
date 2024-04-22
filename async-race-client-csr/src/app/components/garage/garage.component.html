@@ -48,17 +48,17 @@
 
     @for (car of cars | slice: pagination.start : pagination.end; track car.id) {
     <app-track [car]="car" [trackSize]="trackSize" (updEvent)="handleButtons($event)">
-      <app-car [car]="car" [trackSize]="trackSize" />
+      <app-car [car]="car" [trackHeight]="trackSize.trackHeight" [left]="'100px'" [bottom]="'10px'" />
     </app-track>
     } @empty {
     <li>There are no items.</li>
     }
 
     @if(showWinner) {
-      <app-winner-popup [winner]="winner" [winnerTime] = 'winnerTime' />
+    <app-winner-popup [winner]="winner" [winnerTime]='winnerTime' />
     }
 
-    
+
 
   </div>
 </div>

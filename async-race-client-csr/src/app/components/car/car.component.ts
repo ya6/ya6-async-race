@@ -9,11 +9,11 @@ import { Car, TrackSize } from '../../interfaces/interfaces';
   styleUrl: './car.component.scss',
 })
 export class CarComponent {
-  constructor(private cdr: ChangeDetectorRef) {
-    
-  }
-  
+  constructor() {}
 
   @Input() car!: Car;
-  @Input() trackSize!: TrackSize;
+  @Input() trackHeight!: number;
+  @Input() left!: string;
+  @Input() bottom!: string;
+  @Input() right!: string;
 }

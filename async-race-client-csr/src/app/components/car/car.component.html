@@ -1,9 +1,9 @@
 <svg [style.transition]="'transform  '+car.time+'s linear' "
-	[style.transform]="'translateX(' + car.offsetX! * car.move! + 'px)'" class="car" [attr.data-car]="car.id"
-	[attr.data-name]="car.name" [attr.height]="trackSize.trackHeight ? trackSize.trackHeight / 2 : '30px'"
-	clip-rule="evenodd" fill-rule="evenodd" image-rendering="optimizeQuality" shape-rendering="geometricPrecision"
-	text-rendering="geometricPrecision" version="1.0" viewBox="0 0 5273 1612.1" xml:space="preserve"
-	xmlns="http://www.w3.org/2000/svg">
+	[style.transform]="'translateX(' + car.offsetX! * car.move! + 'px)'" [style.left]="left" [style.right]="right"
+	[style.bottom]="bottom" class="car" [attr.data-car]="car.id" [attr.data-name]="car.name"
+	[attr.height]="trackHeight ? trackHeight / 2 : '30'" clip-rule="evenodd" fill-rule="evenodd"
+	image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision"
+	version="1.0" viewBox="0 0 5273 1612.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
 	<path fill="f#2B2A29"
 		d="m4688.7 598.92c179.46 71.09 355.38 151.18 526.3 240.91 26.6 13.96 45.47 37.62 53.27 66.62 2.02 7.52 3.25 15.24 3.61 23.02 0.12 2.57 0.14 5.14 0.08 7.71l-0.12 102.21c3.86 25.25-1.44 50.71-15.35 72.66l-315.85 498.52h-1416.8l-84.16-48.59h-2414.4c-49.85 24.6-103.05 40.94-157.8 48.59h-133.02v1.49c-58.82-6.88-116.02-23.74-169.37-50.08h-117.63c-70.59 0-132.89-35.97-168.19-97.11l-252.86-437.95c-28.97-50.19-34.23-106.94-14.98-161.6 19.24-54.65 58.87-95.58 112.88-116.54l41.57-16.14-51.78-105.3c-12.11-24.62-14.24-52.53-4.08-78.06l-32.93-32.93c-23-23-29.87-57.6-17.41-87.65 12.48-30.08 41.69-49.61 74.27-49.61h193.64l22.77-89.25c10.57-41.4 44.75-72.24 87.02-78.69 326.35-49.73 659.93-78.82 989.62-92.81 326.58-60.99 668.73-104.6 1000.4-115.75 33.85-1.14 67.72-1.91 101.59-2.26l32.24-0.34 28.49 30.93 207.21 8.43 2.7 3c459.02 18.41 911.23 129.11 1310.8 360.65 44.46 12.7 88.79 25.87 132.96 39.51 7.19-0.24 14.38-0.36 21.58-0.36 156.09 0 305.61 55.38 423.79 156.75z" />
 	<path fill="#34302E"

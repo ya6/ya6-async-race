@@ -1,1 +1,30 @@
-<p>top-scores works!</p>
+<div class="top-scores">
+	<div class="container">
+		<div>
+			<div class="cars-count">Winners ( {{winners.length}} cars )</div>
+			<div class="cars-count">
+				<button type="button" data-button="pageControl prev" disabled>1 < </button>
+						<button type="button" data-button="pageControl current" disabled> 1 </button>
+						<button type="button" data-button="pageControl next" disabled> > 1 </button>
+			</div>
+
+			<div class="table-head">
+				<div class="table-item">№</div>
+				<div class="table-item">Car</div>
+				<div class="table-item">Name</div>
+				<div class="table-item">Wins</div>
+				<div class="table-item">Best time</div>
+			</div>
+			@for (winner of winners; track $index) {
+			<app-top-scores-row [winner]="winner">
+				<div style="position: relative;">
+					<app-car [car]="winner.car" [trackHeight]="trackHeight" [left]="'0px'" [bottom]="'-10px'"
+						[right]="'0px'" />
+				</div>
+
+			</app-top-scores-row>
+			}
+
+		</div>
+	</div>
+</div>

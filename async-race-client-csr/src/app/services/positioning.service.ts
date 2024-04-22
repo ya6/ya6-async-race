@@ -16,7 +16,6 @@ export class PositioningService {
   updateViewportSize() {
     this.innerWidth = window.innerWidth;
     this.innerHeight = window.innerHeight;
-    console.log('positioniit-service-new', this.innerWidth, this.innerHeight);
   }
 
   getTrackSizes() {

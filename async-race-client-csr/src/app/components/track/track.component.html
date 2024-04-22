@@ -6,11 +6,10 @@
 				[attr.data-name]="car.name" [attr.data-color]="car.color">Select</button>
 			<button class="track-button" (click)="handler($event, car, 'del' )" [attr.data-id]="car.id">Del</button>
 			<button class="track-button" (click)="handler($event, car, 'run' )" [attr.data-id]="car.id">Run</button>
-			<button class="track-button" (click)="handler($event, car, 'back' )"
-				[attr.data-id]="car.id">Back</button>
+			<button class="track-button" (click)="handler($event, car, 'back' )" [attr.data-id]="car.id">Back</button>
 		</div>
-		<div class="" style="width: 100%">
-			<div class="car-name">{{car.name}} - {{car.id}}</div>
+		<div style="width: 100%">
+			<div class="car-name">{{car.name}}</div>
 			<div style="width: 100%; background: linear-gradient(0deg, rgba(240,240,240,1) 0%,
       rgba(100,100,100,1) 100%); opacity: 1" [style.height.px]="trackSize.trackTop ? trackSize.trackTop  : '20px'">
 			</div>
