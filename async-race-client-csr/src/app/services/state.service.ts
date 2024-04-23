@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CarService } from './car.service';
 
 @Injectable({
   providedIn: 'root',
@@ -7,7 +8,12 @@ export class StateService {
   _cars: any[] = [];
   _raceResults: any = {};
 
-  constructor() {}
+  constructor(private carService: CarService) {}
+
+  async getAllCars() {
+    const cars = await this.carService.getAll();
+    this.cars = cars
+  }
 
   get cars() {
     return this._cars;

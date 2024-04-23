@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DoCheck } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { TrackComponent } from '../track/track.component';
@@ -37,6 +37,7 @@ export class GarageComponent implements OnInit {
   winnerName: string = '';
   winnerTime: number = 1;
   raceIsOn = false;
+  stateIsChanged = false;
 
   creteCarData = {
     name: '',
@@ -63,12 +64,21 @@ export class GarageComponent implements OnInit {
   };
 
   async ngOnInit() {
-    console.log('ngOnInit!');
-
-    this.cars = await this.carService.getAll();
+    if (this.stateService.cars.length === 0) {
+      await this.stateService.getAllCars();
+    }
+    this.cars = this.stateService.cars;
     this.trackSize = this.positioningService.getTrackSizes();
-
     this.setLastPage();
+  }
+
+  async ngDoCheck() {
+    if (this.stateIsChanged) {
+      await this.stateService.getAllCars();
+      this.cars = this.stateService.cars;
+      this.setLastPage();
+      this.stateIsChanged = false;
+    }
   }
 
   handleButtons(data: any) {
@@ -103,8 +113,7 @@ export class GarageComponent implements OnInit {
       this.creteCarData.name,
       this.creteCarData.color
     );
-    this.cars = await this.carService.getAll();
-    this.setLastPage();
+    this.stateIsChanged = true;
   }
 
   async handleUpdate(form: any) {
@@ -112,20 +121,17 @@ export class GarageComponent implements OnInit {
       this.creteCarData.name = 'NoNameUpdated';
     }
     await this.carService.update(this.updateCarData);
-    this.cars = await this.carService.getAll();
-    this.setLastPage();
+    this.stateIsChanged = true;
   }
 
   async handleDelete(id: number) {
     await this.carService.delete(id);
-    this.cars = await this.carService.getAll();
-    this.setLastPage();
+    this.stateIsChanged = true;
   }
 
   async handleGenerateSet(n: number) {
     await this.carService.createSet(n);
-    this.cars = await this.carService.getAll();
-    this.setLastPage();
+    this.stateIsChanged = true;
   }
 
   async startRace() {
@@ -244,6 +250,8 @@ export class GarageComponent implements OnInit {
     this.cars = this.cars.map((car: Car) => {
       return { ...car, time: 0, offsetX: 0 };
     });
+
+    this.stateService.cars = this.cars;
   }
 
   async startEngin(car: Car) {
