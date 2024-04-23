@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
-import { Car, TrackSize } from '../../interfaces/interfaces';
+import { Component, Input } from '@angular/core';
+import { Car } from '../../interfaces/interfaces';
 
 @Component({
   selector: 'app-car',

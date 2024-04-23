@@ -3,11 +3,6 @@ import { Car } from '../interfaces/interfaces';
 import config from '../config';
 import { WinnerService } from './winner.service';
 
-const cars = [
-  { id: 1, name: 'Mercedes', color: 'black' },
-  { id: 2, name: 'Toyota', color: 'white' },
-];
-
 @Injectable({
   providedIn: 'root',
 })
@@ -84,34 +79,19 @@ export class CarService {
     return await Promise.all(jsons);
   }
 
-  async __engineDriveSet(data: any[]) {
-    const allRequests = data.map((el: any) => {
-      const { id, status } = el;
-      return fetch(`${config.engineUrl}?id=${id}&status=${status}`, {
-        method: 'PATCH',
-      });
-    });
-    const responses = await Promise.allSettled(allRequests);
-    console.log('1v-->', responses);
-
-    const jsons = responses.map((el: any) => {
-      return new Promise((resolve) => resolve(el.json()));
-    });
-    const res = await Promise.allSettled(jsons);
-
-    return res;
-  }
-
   async engineControl(data: any) {
     const { id, status } = data;
-
-    const response = await fetch(
-      `${config.engineUrl}?id=${Number(id)}&status=${status}`,
-      {
-        method: 'PATCH',
-      }
-    );
-    return await response.json();
+    try {
+      const response = await fetch(
+        `${config.engineUrl}?id=${Number(id)}&status=${status}`,
+        {
+          method: 'PATCH',
+        }
+      );
+      return await response.json();
+    } catch (error) {
+      return { success: false };
+    }
   }
 
   async engineDrive(data: any) {

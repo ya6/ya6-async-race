@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { UpgadedWinner } from '../../interfaces/interfaces';
 
 @Component({
   selector: 'app-top-scores-row',
@@ -8,5 +9,5 @@ import { Component, Input } from '@angular/core';
   styleUrl: './top-scores-row.component.scss',
 })
 export class TopScoresRowComponent {
-  @Input() winner: any = {};
+  @Input() winner!: UpgadedWinner;
 }

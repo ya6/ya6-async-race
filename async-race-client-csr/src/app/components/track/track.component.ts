@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Car, TrackSize } from '../../interfaces/interfaces';
-import { CarService } from '../../services/car.service';
 
 @Component({
   selector: 'app-track',
@@ -10,8 +9,6 @@ import { CarService } from '../../services/car.service';
   styleUrl: './track.component.scss',
 })
 export class TrackComponent {
-  constructor(private carService: CarService) {}
-
   @Input() car!: Car;
   @Input() trackSize!: TrackSize;
   @Output() updEvent = new EventEmitter();
@@ -25,18 +22,17 @@ export class TrackComponent {
       case 'select':
         this.updEvent.emit({ car, action: 'select' });
         break;
-        
-        case 'run':
+
+      case 'run':
         this.updEvent.emit({ car, action: 'run' });
         break;
-        
-        case 'back':
+
+      case 'back':
         this.updEvent.emit({ car, action: 'back' });
         break;
 
       default:
         console.log(`Sorry`);
     }
-    
   }
 }

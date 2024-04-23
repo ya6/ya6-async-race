@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { TopScoresRowComponent } from '../top-scores-row/top-scores-row.component';
 import { WinnerService } from '../../services/winner.service';
 import { CarComponent } from '../car/car.component';
-import config from '../../config';
 import { CommonModule } from '@angular/common';
 import { UpgadedWinner } from '../../interfaces/interfaces';
+import config from '../../config';
 
 @Component({
   selector: 'app-top-scores',

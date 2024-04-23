@@ -1,16 +1,15 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 import { TrackComponent } from '../track/track.component';
 import { Car, TrackSize } from '../../interfaces/interfaces';
 import { PositioningService } from '../../services/positioning.service';
 import { CarComponent } from '../car/car.component';
-import config from '../../config';
 import { FormsModule } from '@angular/forms';
 import { CarService } from '../../services/car.service';
 import { StateService } from '../../services/state.service';
 import { WinnerPopupComponent } from '../winner-popup/winner-popup.component';
 import { WinnerService } from '../../services/winner.service';
+import config from '../../config';
 
 @Component({
   selector: 'app-garage',
@@ -25,7 +24,7 @@ import { WinnerService } from '../../services/winner.service';
   templateUrl: './garage.component.html',
   styleUrl: './garage.component.scss',
 })
-export class GarageComponent implements OnInit {
+export class GarageComponent implements OnInit, DoCheck {
   constructor(
     private carService: CarService,
     private positioningService: PositioningService,
@@ -137,15 +136,17 @@ export class GarageComponent implements OnInit {
     this.stateIsChanged = true;
   }
 
-  async startRace() {
-    if (this.raceIsOn) {
-      return;
-    }
-    // this.raceIsOn = true;
-    this.stateService.raceIsOn = true;
-
-    const topWinners = await this.winnerService.getAll();
+  setSpeed(car: Car, velocity: number, adapter = 400) {
     this.trackSize = this.positioningService.getTrackSizes();
+    car.time = adapter / velocity;
+    car.move = 1;
+    car.offsetX = this.trackSize.trackLength;
+  }
+
+  async startRace() {
+    this.resetRace();
+
+    this.stateService.raceIsOn = true;
 
     const toEngineCars = this.cars.slice(
       this.pagination.start,
@@ -163,12 +164,7 @@ export class GarageComponent implements OnInit {
       index < this.pagination.start + toEngineCars.length;
       index++
     ) {
-      this.cars[index].time = 400 / result[resultIndex].velocity;
-
-      this.cars[index].move = 1;
-      this.cars[index].offsetX = this.trackSize.trackLength;
-
-      //add to state
+      this.setSpeed(this.cars[index], result[resultIndex].velocity);
       raceStats[this.cars[index].id] = {
         time: this.cars[index].time,
         status: true,
@@ -185,7 +181,6 @@ export class GarageComponent implements OnInit {
       this.drive(car);
     }
 
-    // winn!
     const win = setTimeout(() => {
       if (toEngineCars.length > 0 && this.raceIsOn) {
         this.showWinner = true;
@@ -214,7 +209,7 @@ export class GarageComponent implements OnInit {
           this.winnerName = winnerCar!.name;
           this.winnerTime = Number(currentWinner.time.toFixed(2));
           currentWinner.time = this.winnerTime;
-          // create or update winner
+
           this.winnerService.updateWinnersTable(currentWinner);
         }
       } else return;
@@ -243,7 +238,7 @@ export class GarageComponent implements OnInit {
   }
 
   async resetRace() {
-    this.stateService.raceIsOn  = false;
+    this.stateService.raceIsOn = false;
     this.showWinner = false;
     const toEngineCars = this.cars.slice(
       this.pagination.start,
@@ -265,13 +260,27 @@ export class GarageComponent implements OnInit {
       id: car.id,
       status: 'started',
     });
+
+    this.setSpeed(car, response.velocity, 600);
+
+    const driveResponse = await this.carService.engineControl({
+      id: car.id,
+      status: 'drive',
+    });
+
+    if (!driveResponse.success) {
+      car.time = 10000;
+      car.offsetX = 1;
+    }
   }
 
   async stopEngin(car: Car) {
-    const response = await this.carService.engineControl({
+   await this.carService.engineControl({
       id: car.id,
       status: 'stopped',
     });
+    car.time = 0;
+    car.offsetX = 0;
   }
 
   setLastPage() {
@@ -284,7 +293,6 @@ export class GarageComponent implements OnInit {
   }
 
   prevPage() {
-    
     this.showWinner = false;
     this.pagination.currentPage -= 1;
     this.pagination.start -= this.pagination.pageSize;
@@ -292,7 +300,6 @@ export class GarageComponent implements OnInit {
   }
 
   nextPage() {
-    
     this.showWinner = false;
     this.pagination.currentPage += 1;
     this.pagination.start += this.pagination.pageSize;
