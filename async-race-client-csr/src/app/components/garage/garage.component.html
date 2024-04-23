@@ -3,7 +3,7 @@
 
     <div>
       <button class="fill-button" (click)="startRace()">Race</button>
-      <button class="fill-button" (click)="resetRace()">Reset</button>
+      <button class="fill-button" [style.color]="raceIsOn ? 'gold' : ''" (click)="resetRace()">Reset</button>
     </div>
 
     <div>
@@ -25,7 +25,7 @@
     </div>
 
     <div>
-      <button class="fill-button" (click)="handleGenerateSet(5)">Generate Cars Set</button>
+      <button class="fill-button" (click)="handleGenerateSet(100)">Generate Cars Set</button>
     </div>
 
     <div>

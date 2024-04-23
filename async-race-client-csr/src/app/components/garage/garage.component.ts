@@ -70,6 +70,7 @@ export class GarageComponent implements OnInit {
     this.cars = this.stateService.cars;
     this.trackSize = this.positioningService.getTrackSizes();
     this.setLastPage();
+    this.raceIsOn = this.stateService.raceIsOn;
   }
 
   async ngDoCheck() {
@@ -79,6 +80,8 @@ export class GarageComponent implements OnInit {
       this.setLastPage();
       this.stateIsChanged = false;
     }
+
+    this.raceIsOn = this.stateService.raceIsOn;
   }
 
   handleButtons(data: any) {
@@ -138,7 +141,9 @@ export class GarageComponent implements OnInit {
     if (this.raceIsOn) {
       return;
     }
-    this.raceIsOn = true;
+    // this.raceIsOn = true;
+    this.stateService.raceIsOn = true;
+
     const topWinners = await this.winnerService.getAll();
     this.trackSize = this.positioningService.getTrackSizes();
 
@@ -238,7 +243,8 @@ export class GarageComponent implements OnInit {
   }
 
   async resetRace() {
-    this.raceIsOn = false;
+    this.stateService.raceIsOn  = false;
+    this.showWinner = false;
     const toEngineCars = this.cars.slice(
       this.pagination.start,
       this.pagination.end
@@ -278,14 +284,16 @@ export class GarageComponent implements OnInit {
   }
 
   prevPage() {
-    this.resetRace();
+    
+    this.showWinner = false;
     this.pagination.currentPage -= 1;
     this.pagination.start -= this.pagination.pageSize;
     this.pagination.end -= this.pagination.pageSize;
   }
 
   nextPage() {
-    this.resetRace();
+    
+    this.showWinner = false;
     this.pagination.currentPage += 1;
     this.pagination.start += this.pagination.pageSize;
     this.pagination.end += this.pagination.pageSize;

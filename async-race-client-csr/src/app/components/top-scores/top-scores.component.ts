@@ -32,6 +32,18 @@ export class TopScoresComponent implements OnInit {
     this.setLastPage();
   }
 
+  handleWinsSort() {
+    this.winners.sort((a: UpgadedWinner, b: UpgadedWinner) => {
+      return Number(b.wins) - Number(a.wins);
+    });
+  }
+
+  handleTimeSort() {
+    this.winners.sort((a: UpgadedWinner, b: UpgadedWinner) => {
+      return Number(a.time) - Number(b.time);
+    });
+  }
+
   setLastPage() {
     this.pagination.lastPage = Math.ceil(
       this.winners.length / this.pagination.pageSize
