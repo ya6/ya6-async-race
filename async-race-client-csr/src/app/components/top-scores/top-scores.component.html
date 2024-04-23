@@ -30,16 +30,14 @@
 				<div class="table-item">Best time</div>
 			</div>
 			@for (winner of winners | slice: pagination.start : pagination.end; track $index) {
-			<!-- @for (winner of winners; track $index) { -->
 			<app-top-scores-row [winner]="winner">
 				<div style="position: relative;">
 					<app-car [car]="winner.car" [trackHeight]="trackHeight" [left]="'0px'" [bottom]="'-10px'"
 						[right]="'0px'" />
 				</div>
-
 			</app-top-scores-row>
 			} @empty {
-			<li class="text-center">Waiting for Winners</li>
+			<div class="text-center m-1">Waiting for the Winners</div>
 			}
 
 		</div>

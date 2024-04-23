@@ -31,7 +31,6 @@ export class GarageComponent implements OnInit, DoCheck {
     private stateService: StateService,
     private winnerService: WinnerService
   ) {}
-
   showWinner: boolean = false;
   winnerName: string = '';
   winnerTime: number = 1;
@@ -275,7 +274,7 @@ export class GarageComponent implements OnInit, DoCheck {
   }
 
   async stopEngin(car: Car) {
-   await this.carService.engineControl({
+    await this.carService.engineControl({
       id: car.id,
       status: 'stopped',
     });

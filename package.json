@@ -13,7 +13,7 @@
     "serve:all": "concurrently \"npm run serve:server\" \"npm run serve:client\""
   },
   "keywords": [],
-  "author": "",
+  "author": "ya6",
   "license": "ISC",
   "dependencies": {
     "concurrently": "^8.2.2"

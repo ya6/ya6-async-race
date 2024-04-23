@@ -20,9 +20,9 @@ export class TopScoresComponent implements OnInit {
   pagination = {
     firstPage: 1,
     currentPage: config.startPage,
-    pageSize: config.tracks,
+    pageSize: config.winners,
     start: 0,
-    end: config.tracks,
+    end: config.winners,
     lastPage: 10,
   };
 

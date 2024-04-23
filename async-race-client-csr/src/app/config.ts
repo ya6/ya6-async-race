@@ -3,6 +3,7 @@ const engineUrl = 'http://localhost:3000/engine/';
 const winnersUrl = 'http://localhost:3000/winners/';
 const header = 250;
 const tracks = 7;
+const winners = 10;
 const startPage = 1;
 const generateCars = 100;
 const names = [
@@ -55,4 +56,5 @@ export default {
   names,
   models,
   colors,
+  winners,
 };
