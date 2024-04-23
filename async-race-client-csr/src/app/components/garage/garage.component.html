@@ -51,11 +51,11 @@
       <app-car [car]="car" [trackHeight]="trackSize.trackHeight" [left]="'100px'" [bottom]="'10px'" />
     </app-track>
     } @empty {
-    <li>There are no items.</li>
+    <div class="text-center m-1">There are no Cars</div>
     }
 
     @if(showWinner) {
-    <app-winner-popup [winner]="winner" [winnerTime]='winnerTime' />
+    <app-winner-popup [winner]="winnerName" [winnerTime]='winnerTime' />
     }
 
 

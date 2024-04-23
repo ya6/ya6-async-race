@@ -2,21 +2,54 @@ import { Component, OnInit } from '@angular/core';
 import { TopScoresRowComponent } from '../top-scores-row/top-scores-row.component';
 import { WinnerService } from '../../services/winner.service';
 import { CarComponent } from '../car/car.component';
+import config from '../../config';
+import { CommonModule } from '@angular/common';
+import { UpgadedWinner } from '../../interfaces/interfaces';
 
 @Component({
   selector: 'app-top-scores',
   standalone: true,
-  imports: [TopScoresRowComponent, CarComponent],
+  imports: [TopScoresRowComponent, CarComponent, CommonModule],
   templateUrl: './top-scores.component.html',
   styleUrl: './top-scores.component.scss',
 })
 export class TopScoresComponent implements OnInit {
-  winners: any = [];
+  winners: UpgadedWinner[] = [];
   trackHeight = 40;
+
+  pagination = {
+    firstPage: 1,
+    currentPage: config.startPage,
+    pageSize: config.tracks,
+    start: 0,
+    end: config.tracks,
+    lastPage: 10,
+  };
 
   constructor(private winnerService: WinnerService) {}
   async ngOnInit() {
     this.winners = await this.winnerService.getAll();
-    console.log('winners: ', this.winners);
+    this.setLastPage();
+  }
+
+  setLastPage() {
+    this.pagination.lastPage = Math.ceil(
+      this.winners.length / this.pagination.pageSize
+    );
+    if (this.pagination.lastPage === 0) {
+      this.pagination.lastPage = 1;
+    }
+  }
+
+  prevPage() {
+    this.pagination.currentPage -= 1;
+    this.pagination.start -= this.pagination.pageSize;
+    this.pagination.end -= this.pagination.pageSize;
+  }
+
+  nextPage() {
+    this.pagination.currentPage += 1;
+    this.pagination.start += this.pagination.pageSize;
+    this.pagination.end += this.pagination.pageSize;
   }
 }

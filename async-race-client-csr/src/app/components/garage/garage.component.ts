@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-  OnChanges,
-  DoCheck,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { TrackComponent } from '../track/track.component';
@@ -16,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { CarService } from '../../services/car.service';
 import { StateService } from '../../services/state.service';
 import { WinnerPopupComponent } from '../winner-popup/winner-popup.component';
+import { WinnerService } from '../../services/winner.service';
 
 @Component({
   selector: 'app-garage',
@@ -34,12 +29,14 @@ export class GarageComponent implements OnInit {
   constructor(
     private carService: CarService,
     private positioningService: PositioningService,
-    private stateService: StateService
+    private stateService: StateService,
+    private winnerService: WinnerService
   ) {}
 
-  showWinner = false;
-  winner = '1';
-  winnerTime = 1;
+  showWinner: boolean = false;
+  winnerName: string = '';
+  winnerTime: number = 1;
+  raceIsOn = false;
 
   creteCarData = {
     name: '',
@@ -66,6 +63,8 @@ export class GarageComponent implements OnInit {
   };
 
   async ngOnInit() {
+    console.log('ngOnInit!');
+
     this.cars = await this.carService.getAll();
     this.trackSize = this.positioningService.getTrackSizes();
 
@@ -130,6 +129,11 @@ export class GarageComponent implements OnInit {
   }
 
   async startRace() {
+    if (this.raceIsOn) {
+      return;
+    }
+    this.raceIsOn = true;
+    const topWinners = await this.winnerService.getAll();
     this.trackSize = this.positioningService.getTrackSizes();
 
     const toEngineCars = this.cars.slice(
@@ -172,10 +176,10 @@ export class GarageComponent implements OnInit {
 
     // winn!
     const win = setTimeout(() => {
-      if (toEngineCars.length > 0) {
+      if (toEngineCars.length > 0 && this.raceIsOn) {
         this.showWinner = true;
 
-        const winner = { id: 0, time: Infinity };
+        const currentWinner = { id: 0, time: Infinity };
         for (const key in this.stateService.raceResults) {
           if (
             Object.prototype.hasOwnProperty.call(
@@ -184,20 +188,25 @@ export class GarageComponent implements OnInit {
             )
           ) {
             if (this.stateService.raceResults[key]?.status) {
-              if (this.stateService.raceResults[key].time < winner.time) {
-                winner.time = this.stateService.raceResults[key].time;
-                winner.id = Number(key);
+              if (
+                this.stateService.raceResults[key].time < currentWinner.time
+              ) {
+                currentWinner.time = this.stateService.raceResults[key].time;
+                currentWinner.id = Number(key);
               }
             }
           }
         }
 
-        const winnerCar = toEngineCars.find((el) => el.id === winner.id);
+        const winnerCar = toEngineCars.find((el) => el.id === currentWinner.id);
         if (typeof winnerCar === 'object') {
-          this.winner = winnerCar!.name;
-          this.winnerTime = Number(winner.time.toFixed(2));
+          this.winnerName = winnerCar!.name;
+          this.winnerTime = Number(currentWinner.time.toFixed(2));
+          currentWinner.time = this.winnerTime;
+          // create or update winner
+          this.winnerService.updateWinnersTable(currentWinner);
         }
-      }
+      } else return;
       setTimeout(() => {
         clearTimeout(win);
         this.showWinner = false;
@@ -223,23 +232,18 @@ export class GarageComponent implements OnInit {
   }
 
   async resetRace() {
+    this.raceIsOn = false;
     const toEngineCars = this.cars.slice(
       this.pagination.start,
       this.pagination.end
     );
 
     const data = toEngineCars.map((el) => ({ id: el.id, status: 'stopped' }));
+    await this.carService.engineControlSet(data);
 
-    const result: any = await this.carService.engineControlSet(data);
     this.cars = this.cars.map((car: Car) => {
       return { ...car, time: 0, offsetX: 0 };
     });
-  }
-
-  setLastPage() {
-    this.pagination.lastPage = Math.ceil(
-      this.cars.length / this.pagination.pageSize
-    );
   }
 
   async startEngin(car: Car) {
@@ -256,13 +260,24 @@ export class GarageComponent implements OnInit {
     });
   }
 
+  setLastPage() {
+    this.pagination.lastPage = Math.ceil(
+      this.cars.length / this.pagination.pageSize
+    );
+    if (this.pagination.lastPage === 0) {
+      this.pagination.lastPage = 1;
+    }
+  }
+
   prevPage() {
+    this.resetRace();
     this.pagination.currentPage -= 1;
     this.pagination.start -= this.pagination.pageSize;
     this.pagination.end -= this.pagination.pageSize;
   }
 
   nextPage() {
+    this.resetRace();
     this.pagination.currentPage += 1;
     this.pagination.start += this.pagination.pageSize;
     this.pagination.end += this.pagination.pageSize;

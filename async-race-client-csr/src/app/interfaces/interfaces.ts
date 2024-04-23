@@ -11,6 +11,17 @@ export interface Car extends BaseEntity {
   dbIdx?: number;
 }
 
+export interface Winner extends BaseEntity {
+  id: number;
+  wins?: number;
+  car?: Car;
+  time: number;
+}
+
+export interface UpgadedWinner extends Winner {
+  car: Car;
+}
+
 export interface TrackSize {
   trackHeight: number;
   trackTop: number;

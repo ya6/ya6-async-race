@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Car } from '../interfaces/interfaces';
 import config from '../config';
+import { WinnerService } from './winner.service';
 
 const cars = [
   { id: 1, name: 'Mercedes', color: 'black' },
@@ -11,7 +12,7 @@ const cars = [
   providedIn: 'root',
 })
 export class CarService {
-  constructor() {}
+  constructor(private winnerService: WinnerService) {}
 
   async getAll() {
     const response = await fetch(config.garageUrl);
@@ -50,6 +51,8 @@ export class CarService {
         'Content-Type': 'application/json',
       },
     });
+
+    this.winnerService.delete(id);
   }
 
   async createSet(n = 5) {

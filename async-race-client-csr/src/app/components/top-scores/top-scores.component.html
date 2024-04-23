@@ -1,11 +1,21 @@
 <div class="top-scores">
 	<div class="container">
 		<div>
-			<div class="cars-count">Winners ( {{winners.length}} cars )</div>
-			<div class="cars-count">
-				<button type="button" data-button="pageControl prev" disabled>1 < </button>
-						<button type="button" data-button="pageControl current" disabled> 1 </button>
-						<button type="button" data-button="pageControl next" disabled> > 1 </button>
+
+			<div>
+				<div class="cars-count">Winners ( {{winners.length}} cars )</div>
+				<div class="cars-count" style="text-align: center; margin-top: 0.5rem ">
+					<button type="button" (click)="prevPage()"
+						[disabled]="pagination.currentPage==1">{{pagination.firstPage}}
+						&lt;
+					</button>
+					<button type="button" disabled
+						style="width: 1rem; margin: 0 0.3rem; padding: 2px 20px 2px 14px ;  text-align: left; font-weight: 800; background-color: lightgreen; border: none;">
+						{{pagination.currentPage}} </button>
+					<button type="button" (click)="nextPage()"
+						[disabled]="pagination.currentPage === pagination.lastPage">&gt;
+						{{pagination.lastPage}} </button>
+				</div>
 			</div>
 
 			<div class="table-head">
@@ -15,7 +25,8 @@
 				<div class="table-item">Wins</div>
 				<div class="table-item">Best time</div>
 			</div>
-			@for (winner of winners; track $index) {
+			@for (winner of winners | slice: pagination.start : pagination.end; track $index) {
+			<!-- @for (winner of winners; track $index) { -->
 			<app-top-scores-row [winner]="winner">
 				<div style="position: relative;">
 					<app-car [car]="winner.car" [trackHeight]="trackHeight" [left]="'0px'" [bottom]="'-10px'"
@@ -23,6 +34,8 @@
 				</div>
 
 			</app-top-scores-row>
+			} @empty {
+			<li class="text-center">Waiting for Winners</li>
 			}
 
 		</div>
