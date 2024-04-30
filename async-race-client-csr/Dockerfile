@@ -14,6 +14,6 @@ FROM nginx:alpine
 
 COPY --from=builder /usr/src/app/dist/async-race-client-csr/browser /usr/share/nginx/html
 
-EXPOSE 80
+EXPOSE 8080
 
 CMD ["nginx", "-g", "daemon off;"]
