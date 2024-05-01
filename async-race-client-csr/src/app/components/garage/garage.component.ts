@@ -143,7 +143,9 @@ export class GarageComponent implements OnInit, DoCheck {
   }
 
   async startRace() {
-    this.resetRace();
+    if (this.stateService.raceIsOn) {
+      return
+    }
 
     this.stateService.raceIsOn = true;
 
