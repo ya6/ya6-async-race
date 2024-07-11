@@ -170,9 +170,31 @@ button {
   z-index: 100;
 }
 .track-button {
-  margin-top: 0.1rem;
-  margin-left: 0.1rem;
+  font-size: 24px;
+  transform: scale(0.6);
+  position: absolute;
 }
+
+.run-button {
+  left: 0;
+  top: 0;
+}
+
+.back-button {
+  left: 40px;
+  top: 0;
+}
+
+.select-button {
+  left: -5px;
+  top: 25px;
+}
+
+.del-button {
+  left: 52px;
+  top: 25px;
+}
+
 .car {
   position: absolute;
   margin: auto;
