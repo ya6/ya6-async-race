@@ -9,16 +9,16 @@
     <div>
       <div>
         <form #creteForm="ngForm" (ngSubmit)="handleCreate(creteForm)">
-          <input type="text" name="creteName" [(ngModel)]="creteCarData.name" required>
-          <input type="color" name="creteColor" [(ngModel)]="creteCarData.color" class="pick-color">
+          <input type="text" name="creteName" [(ngModel)]="creteCarData.name" required aria-label="add car title">
+          <input type="color" name="creteColor" [(ngModel)]="creteCarData.color" class="pick-color" aria-label="add car color">
           <button type="submit" class="fill-button">Crete</button>
         </form>
       </div>
       <div>
         <form #updateForm="ngForm" (ngSubmit)="handleUpdate(updateForm)">
-          <input type="text" name="updateName" [(ngModel)]="updateCarData.name" required>
+          <input type="text" name="updateName" [(ngModel)]="updateCarData.name" required aria-label="update car title">
           <input type="hidden" name="updateId" [(ngModel)]="updateCarData.id">
-          <input type="color" name="updateColor" class="pick-color" [(ngModel)]="updateCarData.color">
+          <input type="color" name="updateColor" class="pick-color" [(ngModel)]="updateCarData.color" aria-label="update car color">
           <button type="submit" class="fill-button">Update</button>
         </form>
       </div>
