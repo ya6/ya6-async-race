@@ -169,10 +169,11 @@ button {
   height: 70%;
   z-index: 100;
 }
+
 .track-button {
-  font-size: 24px;
-  transform: scale(0.6);
+  font-size: 12px;
   position: absolute;
+  padding: 5px;
 }
 
 .run-button {
@@ -186,13 +187,13 @@ button {
 }
 
 .select-button {
-  left: -5px;
-  top: 25px;
+  left: 0;
+  top: 30px;
 }
 
 .del-button {
   left: 52px;
-  top: 25px;
+  top: 30px;
 }
 
 .car {
